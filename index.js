@@ -35,10 +35,125 @@ const {
     jidNormalizedUser,
     makeCacheableSignalKeyStore,
     delay
-} = require("@whiskeysockets/baileys")
+} = require("@zentrix/baileys")
+const NodeCache = require("node-cache")
+// Using a  persisted store instead of makeInMemoryStore (compat across versions)
+const pino = require("")
+const readline = require("readline")
+const { parsePhoneNumber } = require("libphonenumber-js")
+const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
+const { rmSync, existsSync } = require('fs')
+const { join } = require('path')
+
+// Import lightweight store
+const store = require('./lib/lightweight_store')
+
+// Initialize store
+store.readFromFile()
+const settings = require('./settings')
+setInterval(() => store.writeToFile(), settings.storeWriteInterval || 10000)
+
+// Memory optimization - Force garbage collection if available
+setInterval(() => {
+    if (global.gc) {
+        global.gc()
+        console.log('🧹 Garbage collection completed')
+    }
+}, 60_000) // every 1 minute
+
+// Memory monitoring - Restart if RAM gets too high
+setInterval(() => {
+    const used = process.memoryUsage().rss / 1024 / 1024
+    if (used > 400) {
+        console.log('⚠️ RAM too high (>400MB), restarting bot...')
+        process.exit(1) // Panel will auto-restart
+    }
+}, 30_000) // check every 30 seconds
+
+let phoneNumber = "911234567890"
+let owner = JSON.parse(fs.readFileSync('./data/owner.")
 const NodeCache = require("node-cache")
 // Using a lightweight persisted store instead of makeInMemoryStore (compat across versions)
+const pino = require("")
+const readline = require("readline")
+const { parsePhoneNumber } = require("libphonenumber-js")
+const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
+const { rmSync, existsSync } = require('fs')
+const { join } = require('path')
+
+// Import lightweight store
+const store = require('./lib/lightweight_store')
+
+// Initialize store
+store.readFromFile()
+const settings = require('./settings')
+setInterval(() => store.writeToFile(), settings.storeWriteInterval || 10000)
+
+// Memory optimization - Force garbage collection if available
+setInterval(() => {
+    if (global.gc) {
+        global.gc()
+        console.log('🧹 Garbage collection completed')
+    }
+}, 60_000) // every 1 minute
+
+// Memory monitoring - Restart if RAM gets too high
+setInterval(() => {
+    const used = process.memoryUsage().rss / 1024 / 1024
+    if (used > 400) {
+        console.log('⚠️ RAM too high (>400MB), restarting bot...')
+        process.exit(1) // Panel will auto-restart
+    }
+}, 30_000) // check every 30 seconds
+
+let phoneNumber = "911234567890"
+let owner = JSON.parse(fs.readFileSync('./data/owner.json'))
+
+global.botname = "KNIGHT BOT"
+global.themeemoji = "•"
+const pairingCode = !!phoneNumber || process.argv.in persisted store instead of makeInMemoryStore (compat across versions)
 const pino = require("pino")
+const readline = require("readline")
+const { parsePhoneNumber } = require("libphonenumber-js")
+const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
+const { rmSync, existsSync } = require('fs')
+const { join } = require('path')
+
+// Import lightweight store
+const store = require('./lib/lightweight_store')
+
+// Initialize store
+store.readFromFile()
+const settings = require('./settings')
+setInterval(() => store.writeToFile(), settings.storeWriteInterval || 10000)
+
+// Memory optimization - Force garbage collection if available
+setInterval(() => {
+    if (global.gc) {
+        global.gc()
+        console.log('🧹 Garbage collection completed')
+    }
+}, 60_000) // every 1 minute
+
+// Memory monitoring - Restart if RAM gets too high
+setInterval(() => {
+    const used = process.memoryUsage().rss / 1024 / 1024
+    if (used > 400) {
+        console.log('⚠️ RAM too high (>400MB), restarting bot...')
+        process.exit(1) // Panel will auto-restart
+    }
+}, 30_000) // check every 30 seconds
+
+let phoneNumber = "911234567890"
+let owner = JSON.parse(fs.readFileSync('./data/owner.json'))
+
+global.botname = "KNIGHT BOT"
+global.themeemoji = "•"
+const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
+const useMobile = process.argv.includes("--mobile")
+
+// Only create readline interface if we're in an interactive environment
+const rl = process.stdin.isTTY ? readline.crea")
 const readline = require("readline")
 const { parsePhoneNumber } = require("libphonenumber-js")
 const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
